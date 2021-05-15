@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>pngkey.com-red-x-png-3367399.png</file>
+    <file>maxresdefault.jpg</file>
+  </qresource>
+</RCC>
