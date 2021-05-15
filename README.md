@@ -2,4 +2,5 @@
 <b>Support Server:</b>
 <ol>
 <li>TruyenVN</li>
+<li>TruyenQQ</li>
 </ol>
