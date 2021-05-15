@@ -1,8 +1,7 @@
 from PyQt5.QtGui import QMouseEvent, QCursor, QFont
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QPlainTextEdit, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QPlainTextEdit, QLabel, QLineEdit
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QCoreApplication
-from res import resource_rc 
-
+from res import resource_rc, gg, func
 
 class Ui_Form(QWidget):
     def __init__(self):
@@ -18,11 +17,17 @@ class Ui_Form(QWidget):
 
         self.plainTextEdit = QPlainTextEdit(self)
         self.plainTextEdit.setGeometry(QRect(20, 70, 421, 301))
-        self.plainTextEdit.setStyleSheet("border-radius: 5px; background-color: rgba(255, 99, 71, 0.6); ")
+        self.plainTextEdit.setStyleSheet("border-radius: 5px; background-color: rgba(255, 99, 71, 0.6); font-size:16px")
+        
+        # thread number
+
+        self.threadnum = QLineEdit(self)
+        self.threadnum.setGeometry(QRect(480, 70, 221, 30))
+        self.threadnum.setPlaceholderText("Số Thread")
 
         # Push Button Check Login Google
         self.loginGoogleButton = QPushButton(self)
-        self.loginGoogleButton.setGeometry(QRect(480, 120, 221, 61))
+        self.loginGoogleButton.setGeometry(QRect(480, 140, 221, 61))
 
         font = QFont()
         font.setFamily("Mongolian Baiti")
@@ -31,14 +36,16 @@ class Ui_Form(QWidget):
         self.loginGoogleButton.setFont(font)
         self.loginGoogleButton.setStyleSheet("QPushButton {border-radius: 10px;background-color: rgba(255, 99, 71, 0.9)} QPushButton::pressed {border-radius: 10px;background-color: rgba(255, 99, 71, 0.6)}")
         self.loginGoogleButton.setText("Login Google")
+        self.loginGoogleButton.clicked.connect(lambda: func.validate(self, self.threadnum.text()))
 
         # Push Button Check Process
         font = QFont()
         font.setFamily("Mongolian Baiti")
         font.setPointSize(10)
         self.process_label = QPushButton(self)
-        self.process_label.setGeometry(QRect(480, 200, 221, 51))
+        self.process_label.setGeometry(QRect(480, 220, 221, 51))
         self.process_label.setText("Click to view process")
+        
         # Close
         self.xButton = QPushButton(self)
         self.xButton.setGeometry(QRect(720, 10, 21, 21))

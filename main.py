@@ -1,7 +1,5 @@
 from res.ui import Ui_Form
-from PyQt5.QtGui import QMouseEvent, QCursor, QFont
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QPlainTextEdit, QLabel
-from PyQt5.QtCore import Qt, QRect, QMetaObject, QCoreApplication
 
 import sys
 
