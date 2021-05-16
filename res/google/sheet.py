@@ -4,10 +4,10 @@ from gglib import Create_Service
 
 now = datetime.datetime.now()
 
-CLIENT_SECRET_FILE = 'cre.json'
+CLIENT_SECRET_FILE = r'D:\\pycoder\\GUI\\leechTruyen\\res\\google\\cre.json'
 API_SERVICE_NAME = 'sheets'
 API_VERSION = 'v4'
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
 
 
 payload = {
@@ -18,14 +18,11 @@ payload = {
 
 
 service = Create_Service(CLIENT_SECRET_FILE, API_SERVICE_NAME, API_VERSION, SCOPES)
+# service1 = Create_Service(CLIENT_SECRET_FILE, 'drive', 'v3', SCOPES)
 
 def create_log_file():
     sheets_file1 = service.spreadsheets().create(body=payload).execute()
-    # dict_keys(['spreadsheetId', 'properties', 'sheets', 'spreadsheetUrl'])
-    # print(sheets_file1)
-    print(sheets_file1['spreadsheetUrl'])
-    print(sheets_file1['spreadsheetId'])
-    values = [["ThờI gian"],["Chap Link"],["Trạng Thái"]]
+    values = [["Thời gian"],["Chap Link"],["Trạng Thái"]]
     value_range_body = {
         'majorDimension': 'COLUMNS',
         'values': values
@@ -37,6 +34,7 @@ def create_log_file():
         range='A1',
         body=value_range_body
     ).execute()
+    return sheets_file1
 
 def insert(chaplink, data, cell_range_insert, spreadsheet_id):
     values = [[now.strftime("%H:%M")],[chaplink],[data]]
@@ -53,6 +51,18 @@ def insert(chaplink, data, cell_range_insert, spreadsheet_id):
     ).execute()
 
 
+# print(service1)
+logfile = create_log_file()
+insert("12",'Hoang DZ', 'A2', logfile['spreadsheetId'])
+# results = service.files().list(
+#         pageSize=10, fields="nextPageToken, files(id, name)").execute()
+# items = results.get('files', [])
 
-create_log_file()
-insert("12",'Hoang DZ', 'A2', '1FBmwpxR2RexwzDxEU3DehuEhsfnlzGQ01fP1YlRxIGc')
+# if not items:
+#     print('No files found.')
+# else:
+#     print('Files:')
+#     for item in items:
+#         print(u'{0} ({1})'.format(item['name'], item['id']))
+
+# os.system("pause")
