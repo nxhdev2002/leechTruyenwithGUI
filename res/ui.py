@@ -49,7 +49,6 @@ class Ui_Form(QWidget):
 
         self.labelInfoUser.setFont(font)
         self.labelInfoUser.setStyleSheet("QPushButton {border-radius: 10px;background-color: rgba(255, 99, 71, 0.9)}")
-        self.labelInfoUser.setText("Test")
         self.labelInfoUser.setHidden(1)
 
         # Push Button Check Process
@@ -84,9 +83,10 @@ class Ui_Form(QWidget):
         self.setCursor(QCursor(Qt.ArrowCursor))
 
     def loginGoogleButton_clicked(self):
-        answer = func.validate(self, self.threadnum.text())
+        servicefromoauth = func.validate(self, self.threadnum.text())
         # print(answer)
-        if (answer is not False):
+        if (servicefromoauth is not False):
             self.labelInfoUser.setHidden(0)
+            self.labelInfoUser.setText("Hi " + func.getInfo(servicefromoauth[2]))
             self.loginGoogleButton.setHidden(1)
             

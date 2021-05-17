@@ -36,8 +36,11 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes):
     try:
         sheets = build(API_SERVICE_NAME, API_VERSION, credentials=cred)
         drive = build("drive", "v3", credentials=cred)
-        all = [sheets, drive]
+        user_info = build('oauth2', 'v2', credentials=cred)
+
+        all = [sheets, drive, user_info]
         # print(API_SERVICE_NAME, 'service created successfully')
+        # print(all[2].userinfo().get().execute())
         return all
     except Exception as e:
         print('Unable to connect.')

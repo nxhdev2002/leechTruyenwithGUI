@@ -9,7 +9,7 @@ def login():
     CLIENT_SECRET_FILE = 'res/ggmodule/cre.json'
     API_SERVICE_NAME = 'sheets'
     API_VERSION = 'v4'
-    SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
+    SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/userinfo.profile']
 
 
     payload = {
@@ -64,3 +64,11 @@ class google_drive():
     def __init__(self, service):
         super().__init__()
         self.service = service
+
+class identity():
+    def __init__(self, service):
+        super().__init__()
+        self.service = service
+    def getEmail(self):
+        userinfo = self.service.userinfo().get().execute()
+        return userinfo['given_name']

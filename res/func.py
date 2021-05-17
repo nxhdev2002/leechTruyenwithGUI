@@ -23,3 +23,6 @@ def validate(obj, num):
             return ggfunc.login()
     else:
         return False
+
+def getInfo(service):
+    return ggfunc.identity(service).getEmail()
