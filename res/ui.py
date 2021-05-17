@@ -2,10 +2,14 @@ from PyQt5.QtGui import QMouseEvent, QCursor, QFont
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QPlainTextEdit, QLabel, QLineEdit
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QCoreApplication
 from res import resource_rc, func
+import threading
+
+
 
 class Ui_Form(QWidget):
     def __init__(self):
         super().__init__()
+        self.setFixedSize(750, 450)
         self.setWindowFlags(Qt.FramelessWindowHint)
 
         self.background = QLabel(self)
@@ -36,7 +40,7 @@ class Ui_Form(QWidget):
         self.loginGoogleButton.setFont(font)
         self.loginGoogleButton.setStyleSheet("QPushButton {border-radius: 10px;background-color: rgba(255, 99, 71, 0.9)} QPushButton::pressed {border-radius: 10px;background-color: rgba(255, 99, 71, 0.6)}")
         self.loginGoogleButton.setText("Login Google")
-        self.loginGoogleButton.clicked.connect(lambda: self.loginGoogleButton_clicked())
+        self.loginGoogleButton.clicked.connect(lambda: func.control(self))
 
         # Show info user
 
@@ -82,11 +86,4 @@ class Ui_Form(QWidget):
         self.m_flag=False
         self.setCursor(QCursor(Qt.ArrowCursor))
 
-    def loginGoogleButton_clicked(self):
-        servicefromoauth = func.validate(self, self.threadnum.text())
-        # print(answer)
-        if (servicefromoauth is not False):
-            self.labelInfoUser.setHidden(0)
-            self.labelInfoUser.setText("Hi " + func.getInfo(servicefromoauth[2]))
-            self.loginGoogleButton.setHidden(1)
-            
+    
