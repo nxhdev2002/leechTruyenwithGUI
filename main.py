@@ -1,6 +1,5 @@
 from res.ui import Ui_Form
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QPlainTextEdit, QLabel
-
 import sys
 
 if __name__ == "__main__":

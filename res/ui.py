@@ -1,7 +1,7 @@
 from PyQt5.QtGui import QMouseEvent, QCursor, QFont
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QPlainTextEdit, QLabel, QLineEdit
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QCoreApplication
-from res import resource_rc, gg, func
+from res import resource_rc, func
 
 class Ui_Form(QWidget):
     def __init__(self):
@@ -36,7 +36,21 @@ class Ui_Form(QWidget):
         self.loginGoogleButton.setFont(font)
         self.loginGoogleButton.setStyleSheet("QPushButton {border-radius: 10px;background-color: rgba(255, 99, 71, 0.9)} QPushButton::pressed {border-radius: 10px;background-color: rgba(255, 99, 71, 0.6)}")
         self.loginGoogleButton.setText("Login Google")
-        self.loginGoogleButton.clicked.connect(lambda: func.validate(self, self.threadnum.text()))
+        self.loginGoogleButton.clicked.connect(lambda: self.loginGoogleButton_clicked())
+
+        # Show info user
+
+        self.labelInfoUser = QPushButton(self)
+        self.labelInfoUser.setGeometry(QRect(480, 140, 221, 61))
+
+        font = QFont()
+        font.setFamily("Mongolian Baiti")
+        font.setPointSize(10)
+
+        self.labelInfoUser.setFont(font)
+        self.labelInfoUser.setStyleSheet("QPushButton {border-radius: 10px;background-color: rgba(255, 99, 71, 0.9)}")
+        self.labelInfoUser.setText("Test")
+        self.labelInfoUser.setHidden(1)
 
         # Push Button Check Process
         font = QFont()
@@ -68,3 +82,11 @@ class Ui_Form(QWidget):
     def mouseReleaseEvent(self, QMouseEvent):
         self.m_flag=False
         self.setCursor(QCursor(Qt.ArrowCursor))
+
+    def loginGoogleButton_clicked(self):
+        answer = func.validate(self, self.threadnum.text())
+        # print(answer)
+        if (answer is not False):
+            self.labelInfoUser.setHidden(0)
+            self.loginGoogleButton.setHidden(1)
+            

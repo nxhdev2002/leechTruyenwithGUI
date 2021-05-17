@@ -34,9 +34,11 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes):
             pickle.dump(cred, token)
 
     try:
-        service = build(API_SERVICE_NAME, API_VERSION, credentials=cred)
-        print(API_SERVICE_NAME, 'service created successfully')
-        return service
+        sheets = build(API_SERVICE_NAME, API_VERSION, credentials=cred)
+        drive = build("drive", "v3", credentials=cred)
+        all = [sheets, drive]
+        # print(API_SERVICE_NAME, 'service created successfully')
+        return all
     except Exception as e:
         print('Unable to connect.')
         print(e)
