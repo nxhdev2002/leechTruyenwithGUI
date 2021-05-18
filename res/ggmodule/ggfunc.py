@@ -1,6 +1,7 @@
 import os, sys
 import datetime
 from res.ggmodule.gglib import Create_Service
+from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 
 now = datetime.datetime.now()
 
@@ -64,11 +65,33 @@ class google_drive():
     def __init__(self, service):
         super().__init__()
         self.service = service
+    def create_folder(self, name):
+        file_metadata = {
+            'name': name,
+            'mimeType': 'application/vnd.google-apps.folder',
+            'parents': ["13VBW9h17ZlbDuxegnmn0F3ZmPsP-lRyb"]
+        }
+        file = self.service.files().create(body=file_metadata,
+                                    fields='id').execute()
+        return file.get('id')
+    
+    def upload_to_folder(self, img, folder_id):
+        file_metadata = {
+            'name': img,
+            'parents': [folder_id]
+        }
+        media = MediaFileUpload(img,
+                                mimetype='image/jpeg',
+                                resumable=True)
+        file = self.service.files().create(body=file_metadata,
+                                            media_body=media,
+                                            fields='id').execute()
+        return file.get('id')
 
 class identity():
     def __init__(self, service):
         super().__init__()
         self.service = service
-    def getEmail(self):
+    def getName(self):
         userinfo = self.service.userinfo().get().execute()
         return userinfo['given_name']

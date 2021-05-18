@@ -2,6 +2,7 @@ from PyQt5.QtGui import QMouseEvent, QCursor, QFont
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QPlainTextEdit, QLabel, QLineEdit
 from PyQt5.QtCore import Qt, QRect, QMetaObject, QCoreApplication
 from res import resource_rc, func
+from res.text import *
 import threading
 
 
@@ -27,7 +28,7 @@ class Ui_Form(QWidget):
 
         self.threadnum = QLineEdit(self)
         self.threadnum.setGeometry(QRect(480, 70, 221, 30))
-        self.threadnum.setPlaceholderText("Số Thread")
+        self.threadnum.setPlaceholderText(string['ui']['thread_number'])
 
         # Push Button Check Login Google
         self.loginGoogleButton = QPushButton(self)
@@ -39,7 +40,7 @@ class Ui_Form(QWidget):
 
         self.loginGoogleButton.setFont(font)
         self.loginGoogleButton.setStyleSheet("QPushButton {border-radius: 10px;background-color: rgba(255, 99, 71, 0.9)} QPushButton::pressed {border-radius: 10px;background-color: rgba(255, 99, 71, 0.6)}")
-        self.loginGoogleButton.setText("Login Google")
+        self.loginGoogleButton.setText(string['ui']['google_login'])
         self.loginGoogleButton.clicked.connect(lambda: func.control(self))
 
         # Show info user
@@ -61,7 +62,7 @@ class Ui_Form(QWidget):
         font.setPointSize(10)
         self.process_label = QPushButton(self)
         self.process_label.setGeometry(QRect(480, 220, 221, 51))
-        self.process_label.setText("Click to view process")
+        self.process_label.setText(string['ui']['click_view_process'])
         
         # Close
         self.xButton = QPushButton(self)
