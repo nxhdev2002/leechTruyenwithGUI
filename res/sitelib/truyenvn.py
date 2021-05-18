@@ -38,7 +38,7 @@ class truyenVN():
         arr = []
         for i in imglist:
             print(i)
-            r = requests.get(i)
+            r = requests.get(i.replace("\r", ""))
             file = 'rs{chap}/{id}.jpg'.format(id=id, chap=chap)
             try:
                 with open(file, 'wb') as f:

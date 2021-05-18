@@ -5,18 +5,18 @@ import threading
 import shutil
 from queue import Queue
 from res.sitelib.truyenvn import truyenVN
-from res import text
+from res.text import string
 
 def validate(obj, num):
     try:
         num = int(num)
         check = True
     except ValueError:
-        QMessageBox.critical(obj, text['func']['title_alert_box'], text['func']['message_alert_box'], QMessageBox.Cancel, QMessageBox.Cancel)
+        QMessageBox.critical(obj, string['func']['title_alert_box'], string['func']['message_alert_box'], QMessageBox.Cancel, QMessageBox.Cancel)
         check = False
     if check:
         if num > 500:
-            confirm = QMessageBox.warning(obj, text['func']['title_confirm_box'], text['func']['message_confirm_box'], QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel)
+            confirm = QMessageBox.warning(obj, string['func']['title_confirm_box'], string['func']['message_confirm_box'], QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel)
             if (confirm == QMessageBox.Yes):
                 return ggfunc.login()
             else:
@@ -44,16 +44,18 @@ class control():
             chapnew = truyenVN.getAllChap(item)
             drive = ggfunc.google_drive(self.servicefromoauth[1])
             foldergoogleid = (drive.create_folder(item.split(".com/")[1]))
-            for i in chapnew:
+            for i in range(int(chapnew)):
+                i = str(i+1)
+                idfolderchap = drive.create_folder("Chap " + (i), parent=foldergoogleid)
                 imglist = truyenVN.getImg(f"{item}-chuong-{i}.html")
                 arrimg = truyenVN.saveImg(imglist, i)
                 for j in arrimg:
-                    print(drive.upload_to_folder(j, foldergoogleid))
+                    print(drive.upload_to_folder(j, idfolderchap))
 
 
 
                 shutil.rmtree('rs' + i, ignore_errors=True)
-
+                print("Chap " + i + " done")
             q.task_done()
 
     def controller(self, listchap, thread_num=10):
