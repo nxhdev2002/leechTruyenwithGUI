@@ -6,30 +6,34 @@ from googleapiclient.http import MediaFileUpload
 now = datetime.datetime.now()
 
 def login():
-    sys.path.append("D:\pycoder\GUI\leechTruyen\res\google")
-    CLIENT_SECRET_FILE = 'res/ggmodule/cre.json'
+    if getattr(sys, 'frozen', False):
+        # If the application is run as a bundle, the pyInstaller bootloader
+        # extends the sys module by a flag frozen=True and sets the app 
+        # path into variable _MEIPASS'.
+        application_path = sys._MEIPASS
+    else:
+        application_path = os.path.dirname(os.path.abspath(__file__))
+    CLIENT_SECRET_FILE = application_path + '/res/ggmodule/cre.json'
     API_SERVICE_NAME = 'sheets'
     API_VERSION = 'v4'
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/userinfo.profile']
-
-
-    payload = {
-        'properties': {
-            'title': 'Logging ' + now.strftime("%H:%M - %D")
-        }
-    }
-
 
     service = Create_Service(CLIENT_SECRET_FILE, API_SERVICE_NAME, API_VERSION, SCOPES)
 
     return (service)
 
 class google_sheets():
+
     def __init__(self, service):
         super().__init__()
         self.service = service
 
     def create_log_file(self):
+        payload = {
+            'properties': {
+                'title': 'Logging ' + now.strftime("%H:%M - %D")
+            }
+        }
         sheets_file1 = self.service.spreadsheets().create(body=payload).execute()
         values = [["Thời gian"],["Chap Link"],["Trạng Thái"]]
         value_range_body = {
@@ -65,13 +69,13 @@ class google_drive():
     def __init__(self, service):
         super().__init__()
         self.service = service
-    def create_folder(self, name, parent='13VBW9h17ZlbDuxegnmn0F3ZmPsP-lRyb'):
+    def create_folder(self, name, parent='1Eq8TUvui_krkTFo3sbwOIg-GdWPSweyy'):
         file_metadata = {
             'name': name,
             'mimeType': 'application/vnd.google-apps.folder',
             'parents': [parent]
         }
-        file = self.service.files().create(body=file_metadata,
+        file = self.service.files().create(supportsTeamDrives=True,body=file_metadata,
                                     fields='id').execute()
         return file.get('id')
     
@@ -83,7 +87,7 @@ class google_drive():
         media = MediaFileUpload(img,
                                 mimetype='image/jpeg',
                                 resumable=True)
-        file = self.service.files().create(body=file_metadata,
+        file = self.service.files().create(supportsTeamDrives=True, body=file_metadata,
                                             media_body=media,
                                             fields='id').execute()
         return file.get('id')

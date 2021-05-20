@@ -1,5 +1,6 @@
 
 from PyQt5.QtWidgets import QMessageBox
+from pyasn1.type.univ import Null
 from res.ggmodule import ggfunc
 import threading
 import shutil
@@ -26,6 +27,10 @@ def validate(obj, num):
     else:
         return False
 
+def error_log(i):
+    with open("log.txt", "a+", encoding="utf-8-sig") as r:
+        r.write(i + ": LỖI\n")
+
 
 class control():
     def __init__(self, Form):
@@ -40,15 +45,31 @@ class control():
                 # print("[{}]  => Hết job".format(threading.current_thread().name))
                 q.task_done()
                 break
-            print("[{}]  => Success -> Working\n".format(threading.current_thread().name))
+
+            print("[{}]  => Success -> Working\n".format(threading.current_thread().name))      
+            data = item.split("|")
+            item = data[0]
             chapnew = truyenVN.getAllChap(item)
+            try:
+                chap_begin = data[1]
+                try:
+                    chap_end = data[2]
+                except:
+                    chap_end = str(int(chapnew) - 1)
+            except:
+                chap_begin = 1
             drive = ggfunc.google_drive(self.servicefromoauth[1])
             foldergoogleid = (drive.create_folder(item.split(".com/")[1]))
-            for i in range(int(chapnew)):
-                i = str(i+1)
+            for i in range(int(chap_begin), int(chap_end)+1):
+                i = str(i)
                 idfolderchap = drive.create_folder("Chap " + (i), parent=foldergoogleid)
-                imglist = truyenVN.getImg(f"{item}-chuong-{i}.html")
-                arrimg = truyenVN.saveImg(imglist, i)
+                url = [f"{item}-chuong-{i}.html", f"{item}-chuong-{i}-2.html"]
+                try:
+                    imglist = truyenVN.getImg(url)
+                except:
+                    error_log(i)
+                    continue
+                arrimg = truyenVN.saveImg(imglist, i, name=item.split(".com/")[1])
                 for j in arrimg:
                     print(drive.upload_to_folder(j, idfolderchap))
 

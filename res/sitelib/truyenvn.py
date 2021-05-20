@@ -12,12 +12,19 @@ class truyenVN():
         return (match[0][2].split()[1])
 
     def getImg(link):
-        r = requests.get(link)
-        str = r.text
-        str = str.split('<input type="hidden" name="p" value="')
-        str = str[1].split('">')
-        p = (str[0])
-
+        try:
+            r = requests.get(link[0])
+            str = r.text
+            str = str.split('<input type="hidden" name="p" value="')
+            str = str[1].split('">')
+            p = (str[0])
+        except:
+            r = requests.get(link[1])
+            str = r.text
+            str = str.split('<input type="hidden" name="p" value="')
+            str = str[1].split('">')
+            p = (str[0])
+            
         payload = {
             'action': 'z_do_ajax',
             '_action': 'load_imgs_for_chapter',
@@ -33,23 +40,26 @@ class truyenVN():
             imgList.append(i['url'])
 
         return imgList
-    def saveImg(imglist, chap):
+    def saveImg(imglist, chap, name=None):
         id = 0
         arr = []
         for i in imglist:
-            print(i)
-            r = requests.get(i.replace("\r", ""))
-            file = 'rs{chap}/{id}.jpg'.format(id=id, chap=chap)
             try:
-                with open(file, 'wb') as f:
-                    f.write(r.content)
-                    f.close()
+                print(i)
+                r = requests.get(i.replace("\r", ""))
+                file = 'rs{chap}/{id}.jpg'.format(id=id, chap=chap)
+                try:
+                    with open(file, 'wb') as f:
+                        f.write(r.content)
+                        f.close()
+                except Exception as e:
+                    os.system('mkdir rs{}'.format(chap))
+                    with open(file, 'wb') as f:
+                        f.write(r.content)
+                        f.close()
+                    print(e)
+                id+=1
+                arr.append(file)
             except Exception as e:
-                os.system('mkdir rs{}'.format(chap))
-                with open(file, 'wb') as f:
-                    f.write(r.content)
-                    f.close()
                 print(e)
-            id+=1
-            arr.append(file)
         return arr
